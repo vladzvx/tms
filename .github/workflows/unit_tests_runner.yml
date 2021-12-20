@@ -28,9 +28,12 @@ jobs:
         cd ../TMS.FuncTests
         echo "${{ secrets.TEST_ENV}}" > .env
         dotnet build --no-restore
+        cd ..
+        ls
+        cp .runsettings > 
     - name: Test
       run: |
         cd TMS.Lib.UnitTests
         dotnet test --no-build --verbosity normal
         cd ../TMS.FuncTests
-        dotnet test --no-build --verbosity normal
+        dotnet test --no-build --verbosity normal -s ../.runsettings
