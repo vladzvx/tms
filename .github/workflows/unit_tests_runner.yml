@@ -19,7 +19,7 @@ jobs:
         cd TMS.Lib.UnitTests
         dotnet restore
         cd ../TMS.FuncTests
-        > .env  ${{ secrets.TEST_ENV}}
+        > .env  "${{ secrets.TEST_ENV}}"
         dotnet restore
         
     - name: Build
