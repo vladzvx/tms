@@ -1,0 +1,38 @@
+version: '3.4'
+
+services:
+  tms.commonservice:
+    container_name: TMS.CommonService
+    image: ${DOCKER_REGISTRY-}tmscommonservice
+    ports:
+        - 5000:5000
+    restart: always
+    build:
+      context: .
+      dockerfile: TMS.CommonService/Dockerfile
+    environment:
+      MONGO_DB_CNNSTR: "mongodb://${MONGO_DB_USER}:${MONGO_DB_PWD}@${MONGO_DB_HOST}:${MONGO_DB_INTERNAL_PORT}"
+      TARANTOOL_CNNSTR: "${TARANTOOL_USER}:${TARANTOOL_PWD}@${TARANTOOL_HOST}:${TARANTOOL_INTERNAL_PORT}"
+
+  mongo:
+    container_name: MongoDB
+    hostname: ${MONGO_DB_HOST}
+    image: mongo
+    restart: always
+    ports:
+      - 5027:${MONGO_DB_INTERNAL_PORT}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_PWD}
+
+  tarantool:
+    container_name: Tarantool
+    hostname: ${TARANTOOL_HOST}
+    build:
+      context: TMS.Lib/Infrastructure/Tarantool
+      dockerfile: Dockerfile
+    ports:
+      - 3301:${TARANTOOL_INTERNAL_PORT}
+    environment:
+      TARANTOOL_USER_NAME: ${TARANTOOL_USER}
+      TARANTOOL_USER_PWD: ${TARANTOOL_PWD}

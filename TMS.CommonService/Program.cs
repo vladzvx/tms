@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace TMS.CommonService
@@ -20,6 +21,10 @@ namespace TMS.CommonService
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.ConfigureKestrel(serverOptions =>
+                    {
+                        serverOptions.Listen(IPAddress.Any, 5000);
+                    });
                     webBuilder.UseStartup<Startup>();
                 });
     }
