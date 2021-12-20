@@ -30,10 +30,10 @@ jobs:
         dotnet build --no-restore
         cd ..
         ls
-        cp .runsettings > 
+        cp .runsettings > /TMS.FuncTests/
     - name: Test
       run: |
         cd TMS.Lib.UnitTests
         dotnet test --no-build --verbosity normal
         cd ../TMS.FuncTests
-        dotnet test --no-build --verbosity normal -s ../.runsettings
+        dotnet test --no-build --verbosity normal -s .runsettings
