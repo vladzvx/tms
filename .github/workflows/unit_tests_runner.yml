@@ -19,12 +19,14 @@ jobs:
         cd TMS.Lib.UnitTests
         dotnet restore
         cd ../TMS.FuncTests
-        echo '${{ secrets.TEST_ENV}}' > .env  
         dotnet restore
         
     - name: Build
       run: | 
         cd TMS.Lib.UnitTests
+        dotnet build --no-restore
+        cd ../TMS.FuncTests
+        echo '${{ secrets.TEST_ENV}}' > .env
         dotnet build --no-restore
     - name: Test
       run: |
