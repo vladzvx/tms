@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TMS.Lib;
 using TMS.Lib.Models;
-
+using TMS.Lib.Services;
 
 namespace TMS.CommonService.Controllers
 {
@@ -13,17 +15,26 @@ namespace TMS.CommonService.Controllers
     [Route("[controller]")]
     public class TestController : ControllerBase
     {
-        private readonly MongoClient mongoClient;
-        public TestController(MongoClient mongoClient)
+        private readonly ComboWorker comboWorker;
+        public TestController(ComboWorker comboWorker)
         {
-            this.mongoClient = mongoClient;
+            this.comboWorker = comboWorker;
         }
 
-        [HttpPost()]
-        public async Task<string> Test(TestModel testModel)
+        [HttpPost("write")]
+        public async Task<string> TestWrite(TestModel testModel)
         {
-            await mongoClient.GetDatabase("test").GetCollection<TestModel>("test").InsertOneAsync(testModel);
-            return System.Text.Json.JsonSerializer.Serialize(testModel);
+            testModel.MongoId = ObjectId.GenerateNewId();
+            testModel.Time = DateTime.UtcNow;
+            await comboWorker.Write(testModel);
+            return "Ok";
+        }
+
+        [HttpPost("read")]
+        public async Task<string> TestRead(TestModel testModel)
+        {
+            await comboWorker.Read(testModel);
+            return "Ok";
         }
     }
 }

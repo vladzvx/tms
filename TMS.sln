@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TMS.FuncTests", "TMS.FuncTe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3BA072DB-5EDB-4573-8E4A-CEEB6536ECCA}"
 	ProjectSection(SolutionItems) = preProject
-		.runsettings = .runsettings
+		test.runsettings = test.runsettings
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TMS.Tests.Common", "TMS.Tests.Common\TMS.Tests.Common.csproj", "{792CD57A-3ADE-4C08-B562-C3AF785A07B5}"
