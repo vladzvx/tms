@@ -34,6 +34,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
+        
     - name: Restore dependencies
       run: |
         cd TMS.Lib.UnitTests
@@ -49,6 +50,7 @@ jobs:
         echo "${{ secrets.TEST_ENV}}" > te.env
         echo "${{ secrets.FUNC_ENV}}" > cw.env
         dotnet build --no-restore
+        
     - name: Test
       run: |
         cd TMS.Lib.UnitTests
@@ -58,7 +60,6 @@ jobs:
         
   clear_infrastructure:
     needs: [deploy_infrastructure, build_and_run_test]
-    if: always()
     runs-on: ubuntu-latest
     steps:
     - name: Deploy Compose
