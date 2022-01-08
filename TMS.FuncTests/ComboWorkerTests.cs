@@ -36,7 +36,7 @@ namespace TMS.FuncTests
             string TARANTOOL_PWD = Environment.GetEnvironmentVariable(Constants.TarantoolPWD_VariableName);
             string TARANTOOL_HOST = Environment.GetEnvironmentVariable(Constants.TarantoolHost_VariableName);
             string TARANTOOL_PORT = Environment.GetEnvironmentVariable(Constants.TarantoolExternalPort_VariableName);
-            string TARANTOOL_CNNSTR = string.Format("{0}:${1}@${2}:${3}", TARANTOOL_USER, TARANTOOL_PWD, TARANTOOL_HOST, TARANTOOL_PORT);
+            string TARANTOOL_CNNSTR = string.Format("{0}:{1}@{2}:{3}", TARANTOOL_USER, TARANTOOL_PWD, TARANTOOL_HOST, TARANTOOL_PORT);
             Environment.SetEnvironmentVariable(Constants.TarantoolConnectionString_VariableName, TARANTOOL_CNNSTR);
 
             worker = new ComboWorker(
