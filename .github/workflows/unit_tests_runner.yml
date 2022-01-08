@@ -24,7 +24,7 @@ jobs:
           cd tms
           sudo docker-compose up -d --build
     
-  build:
+  build_and_run_test:
     needs: deploy_infrastructure
     runs-on: ubuntu-latest
 
@@ -55,3 +55,24 @@ jobs:
         dotnet test --no-build --verbosity normal
         cd ../TMS.FuncTests
         dotnet test --no-build --verbosity normal -s ../test.runsettings
+        
+  clear_infrastructure:
+    needs: build_and_run_test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy Compose
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.TEST_HOST }}
+        username: ${{ secrets.TEST_USER }}
+        password  : ${{ secrets.TEST_PWD }}
+        port: ${{ secrets.TEST_PORT }}
+        script: |
+          cd /bin/tms
+          sudo docker-compose stop
+          sudo docker rm MongoDB
+          sudo docker rm Tarantool
+          sudo docker rm TMS.CommonService
+          sudo docker rmi tmscommonservice
+          sudo docker rmi mongo
+
