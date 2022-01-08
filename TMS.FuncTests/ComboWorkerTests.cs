@@ -58,8 +58,10 @@ namespace TMS.FuncTests
                 Type=100500,
                 Time= dt
             };
+            Console.WriteLine("TestData: " + System.Text.Json.JsonSerializer.Serialize(testModel));
             worker.Write(testModel).Wait();
             var result  = worker.Read(new TestModel() {Entity= testModel.Entity }).Result;
+            Console.WriteLine("Readed: "+System.Text.Json.JsonSerializer.Serialize(result));
             Assert.IsTrue(result.Entity==testModel.Entity);
             Assert.IsTrue(result.MongoId==testModel.MongoId);
             Assert.IsTrue(result.Type==testModel.Type);
