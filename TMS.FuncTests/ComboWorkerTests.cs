@@ -88,10 +88,10 @@ namespace TMS.FuncTests
                 Time = dt
             };
 
-            httpClient.PostAsync("http://" + Environment.GetEnvironmentVariable(Constants.MongoHost_VariableName) + "test/write", new StringContent(System.Text.Json.JsonSerializer.Serialize(testModel),Encoding.UTF8, "application/json")).Wait();
+            httpClient.PostAsync("http://" + Environment.GetEnvironmentVariable(Constants.MongoHost_VariableName) + ":5005/test/write", new StringContent(System.Text.Json.JsonSerializer.Serialize(testModel),Encoding.UTF8, "application/json")).Wait();
 
-            var rest = httpClient.PostAsync("http://" + Environment.GetEnvironmentVariable(Constants.MongoHost_VariableName) + "test/read_t", new StringContent(System.Text.Json.JsonSerializer.Serialize(testModel), Encoding.UTF8, "application/json")).Result;
-            var resm = httpClient.PostAsync("http://" + Environment.GetEnvironmentVariable(Constants.MongoHost_VariableName) + "test/read_m", new StringContent(System.Text.Json.JsonSerializer.Serialize(testModel), Encoding.UTF8, "application/json")).Result;
+            var rest = httpClient.PostAsync("http://" + Environment.GetEnvironmentVariable(Constants.MongoHost_VariableName) + ":5005/test/read_t", new StringContent(System.Text.Json.JsonSerializer.Serialize(testModel), Encoding.UTF8, "application/json")).Result;
+            var resm = httpClient.PostAsync("http://" + Environment.GetEnvironmentVariable(Constants.MongoHost_VariableName) + ":5005/test/read_m", new StringContent(System.Text.Json.JsonSerializer.Serialize(testModel), Encoding.UTF8, "application/json")).Result;
             TestModel testModelFromT = System.Text.Json.JsonSerializer.Deserialize<TestModel>(rest.Content.ReadAsStringAsync().Result);
             TestModel testModelFromM = System.Text.Json.JsonSerializer.Deserialize<TestModel>(resm.Content.ReadAsStringAsync().Result);
 
