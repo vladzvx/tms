@@ -19,6 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="te.env">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="cw.env">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
