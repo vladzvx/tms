@@ -60,7 +60,7 @@ namespace TMS.FuncTests
             Console.WriteLine("TestData: " + System.Text.Json.JsonSerializer.Serialize(testModel));
             worker.Write(testModel).Wait();
             var result1  = worker.ReadTarantool(new TestModel() {Entity= testModel.Entity }).Result;
-            var result2  = worker.ReadMongo(new TestModel() {Entity= testModel.Entity }).Result;
+            var result2  = worker.ReadMongo(new TestModel() {MongoId= testModel.MongoId }).Result;
             Console.WriteLine("Readed: "+System.Text.Json.JsonSerializer.Serialize(result1));
             Assert.IsTrue(result1.Entity==testModel.Entity);
             Assert.IsTrue(result1.MongoId==testModel.MongoId);
