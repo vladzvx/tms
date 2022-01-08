@@ -42,7 +42,7 @@ namespace TMS.Lib.Services
 
         }
 
-        public async Task<TestModel> Read(TestModel testModel)
+        public async Task<TestModel> ReadTarantool(TestModel testModel)
         {
             try
             {
@@ -51,6 +51,21 @@ namespace TMS.Lib.Services
                 var ind1 = await space.GetIndex("entity");
                 var res = await ind1.Select<TarantoolTuple<ulong>, TarantoolTuple<long, long, ulong, ulong, long>>(TarantoolTuple.Create(testModel.Entity), new SelectOptions { Iterator = Iterator.Eq });
                 return new TestModel() {MongoId=IdConverter.Convert((int)res.Data[0].Item2, res.Data[0].Item1), Entity =res.Data[0].Item3,Time=new DateTime( res.Data[0].Item5,DateTimeKind.Utc),Type= res.Data[0].Item4 };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public async Task<TestModel> ReadMongo(TestModel testModel)
+        {
+            try
+            {
+                var coll = database.GetCollection<TestModel>("TestModelsCollection");
+                var res = coll.Find<TestModel>(Builders<TestModel>.Filter.Eq(item => item.MongoId, testModel.MongoId)).FirstOrDefault();
+                return res;
             }
             catch (Exception ex)
             {

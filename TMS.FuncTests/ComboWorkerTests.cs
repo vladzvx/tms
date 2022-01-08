@@ -59,12 +59,18 @@ namespace TMS.FuncTests
             };
             Console.WriteLine("TestData: " + System.Text.Json.JsonSerializer.Serialize(testModel));
             worker.Write(testModel).Wait();
-            var result  = worker.Read(new TestModel() {Entity= testModel.Entity }).Result;
-            Console.WriteLine("Readed: "+System.Text.Json.JsonSerializer.Serialize(result));
-            Assert.IsTrue(result.Entity==testModel.Entity);
-            Assert.IsTrue(result.MongoId==testModel.MongoId);
-            Assert.IsTrue(result.Type==testModel.Type);
-            Assert.IsTrue(result.Time==testModel.Time);
+            var result1  = worker.ReadTarantool(new TestModel() {Entity= testModel.Entity }).Result;
+            var result2  = worker.ReadMongo(new TestModel() {Entity= testModel.Entity }).Result;
+            Console.WriteLine("Readed: "+System.Text.Json.JsonSerializer.Serialize(result1));
+            Assert.IsTrue(result1.Entity==testModel.Entity);
+            Assert.IsTrue(result1.MongoId==testModel.MongoId);
+            Assert.IsTrue(result1.Type==testModel.Type);
+            Assert.IsTrue(result1.Time==testModel.Time);
+
+            Assert.IsTrue(result2.Entity == testModel.Entity);
+            Assert.IsTrue(result2.MongoId == testModel.MongoId);
+            Assert.IsTrue(result2.Type == testModel.Type);
+            Assert.IsTrue(result2.Time == testModel.Time);
         }
 
 

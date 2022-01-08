@@ -33,7 +33,7 @@ namespace TMS.CommonService.Controllers
         [HttpPost("read")]
         public async Task<string> TestRead(TestModel testModel)
         {
-            var res = await comboWorker.Read(testModel);
+            var res = await comboWorker.ReadTarantool(testModel);
             return System.Text.Json.JsonSerializer.Serialize(res);
         }
     }
