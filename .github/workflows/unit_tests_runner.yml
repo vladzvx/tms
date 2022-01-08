@@ -46,7 +46,7 @@ jobs:
         cd TMS.Lib.UnitTests
         dotnet build --no-restore
         cd ../TMS.FuncTests
-        echo "${{ secrets.TEST_ENV}}" > .env
+        echo "${{ secrets.TEST_ENV}}" > te.env
         echo "${{ secrets.FUNC_ENV}}" > cw.env
         dotnet build --no-restore
     - name: Test
