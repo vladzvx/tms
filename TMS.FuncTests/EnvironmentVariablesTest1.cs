@@ -12,7 +12,7 @@ namespace TMS.FuncTests
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            Utils.EnvFileReader(".env");
+            Utils.EnvFileReader("te.env");
         }
 
         [TestMethod]
