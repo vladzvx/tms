@@ -11,6 +11,7 @@ using MongoDB.Bson.Serialization.Conventions;
 using TMS.Lib.Models;
 using MongoDB.Bson;
 using System.Net.Http;
+using System.Threading;
 
 namespace TMS.FuncTests
 {
@@ -60,6 +61,7 @@ namespace TMS.FuncTests
             };
             Console.WriteLine("TestData: " + System.Text.Json.JsonSerializer.Serialize(testModel));
             worker.Write(testModel).Wait();
+            Thread.Sleep(1000);
             var result1  = worker.ReadTarantool(new TestModel() {Entity= testModel.Entity }).Result;
             var result2  = worker.ReadMongo(new TestModel() {MongoId= testModel.MongoId }).Result;
             Console.WriteLine("Readed: "+System.Text.Json.JsonSerializer.Serialize(result1));
@@ -89,7 +91,7 @@ namespace TMS.FuncTests
             };
 
             httpClient.PostAsync("http://" + Environment.GetEnvironmentVariable(Constants.MongoHost_VariableName) + ":5005/test/write", new StringContent(System.Text.Json.JsonSerializer.Serialize(testModel),Encoding.UTF8, "application/json")).Wait();
-
+            Thread.Sleep(1000);
             var rest = httpClient.PostAsync("http://" + Environment.GetEnvironmentVariable(Constants.MongoHost_VariableName) + ":5005/test/read_t", new StringContent(System.Text.Json.JsonSerializer.Serialize(testModel), Encoding.UTF8, "application/json")).Result;
             var resm = httpClient.PostAsync("http://" + Environment.GetEnvironmentVariable(Constants.MongoHost_VariableName) + ":5005/test/read_m", new StringContent(System.Text.Json.JsonSerializer.Serialize(testModel), Encoding.UTF8, "application/json")).Result;
             TestModel testModelFromT = System.Text.Json.JsonSerializer.Deserialize<TestModel>(rest.Content.ReadAsStringAsync().Result);
