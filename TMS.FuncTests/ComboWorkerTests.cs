@@ -17,8 +17,6 @@ namespace TMS.FuncTests
     public class ComboWorkerTests
     {
         static ComboWorker worker;
-        
-
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
