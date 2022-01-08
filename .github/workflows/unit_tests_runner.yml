@@ -4,6 +4,26 @@ on:
     branches: [ main ]
 
 jobs:
+  deploy_infrastructure:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy Compose
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.TEST_HOST }}
+        username: ${{ secrets.TEST_USER }}
+        password  : ${{ secrets.TEST_PWD }}
+        port: ${{ secrets.TEST_PORT }}
+        script: |
+          cd /bin
+          echo "${{ secrets.WORK_ENV }}"> env_file
+          sudo rm -r tms
+          sudo git clone https://${{ secrets.GIT_PWD }}@github.com/vladzvx/tms
+          sudo chmod u+x tms
+          sudo mv env_file tms/.env
+          cd tms
+          sudo docker-compose up -d --build
+    
   build:
 
     runs-on: ubuntu-latest
@@ -27,6 +47,7 @@ jobs:
         dotnet build --no-restore
         cd ../TMS.FuncTests
         echo "${{ secrets.TEST_ENV}}" > .env
+        echo "${{ secrets.FUNC_ENV}}" > cw.env
         dotnet build --no-restore
     - name: Test
       run: |
