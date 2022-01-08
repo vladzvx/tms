@@ -25,7 +25,7 @@ jobs:
           sudo docker-compose up -d --build
     
   build_and_run_test:
-    needs: deploy_infrastructure
+    needs: [deploy_infrastructure]
     runs-on: ubuntu-latest
 
     steps:
@@ -57,7 +57,8 @@ jobs:
         dotnet test --no-build --verbosity normal -s ../test.runsettings
         
   clear_infrastructure:
-    needs: build_and_run_test
+    needs: [deploy_infrastructure, build_and_run_test]
+    if: always()
     runs-on: ubuntu-latest
     steps:
     - name: Deploy Compose
@@ -75,4 +76,6 @@ jobs:
           sudo docker rm TMS.CommonService
           sudo docker rmi tmscommonservice
           sudo docker rmi mongo
+          cd /bin
+          sudo rm -r tms
 
