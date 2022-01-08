@@ -10,6 +10,7 @@ using TMS.Lib.Services;
 using MongoDB.Bson.Serialization.Conventions;
 using TMS.Lib.Models;
 using MongoDB.Bson;
+using System.Net.Http;
 
 namespace TMS.FuncTests
 {
@@ -73,6 +74,37 @@ namespace TMS.FuncTests
             Assert.IsTrue(result2.Time == testModel.Time);
         }
 
+
+        [TestMethod]
+        public void FuncTest2()
+        {
+            HttpClient httpClient = new HttpClient();
+            DateTime dt = DateTime.UtcNow;
+            TestModel testModel = new TestModel()
+            {
+                MongoId = ObjectId.GenerateNewId(),
+                Entity = 100501,
+                Type = 100501,
+                Time = dt
+            };
+
+            httpClient.PostAsync("http://" + Environment.GetEnvironmentVariable(Constants.MongoHost_VariableName) + "test/write", new StringContent(System.Text.Json.JsonSerializer.Serialize(testModel),Encoding.UTF8, "application/json")).Wait();
+
+            var rest = httpClient.PostAsync("http://" + Environment.GetEnvironmentVariable(Constants.MongoHost_VariableName) + "test/read_t", new StringContent(System.Text.Json.JsonSerializer.Serialize(testModel), Encoding.UTF8, "application/json")).Result;
+            var resm = httpClient.PostAsync("http://" + Environment.GetEnvironmentVariable(Constants.MongoHost_VariableName) + "test/read_m", new StringContent(System.Text.Json.JsonSerializer.Serialize(testModel), Encoding.UTF8, "application/json")).Result;
+            TestModel testModelFromT = System.Text.Json.JsonSerializer.Deserialize<TestModel>(rest.Content.ReadAsStringAsync().Result);
+            TestModel testModelFromM = System.Text.Json.JsonSerializer.Deserialize<TestModel>(resm.Content.ReadAsStringAsync().Result);
+
+            Assert.IsTrue(testModelFromT.Entity == testModel.Entity);
+            Assert.IsTrue(testModelFromT.MongoId == testModel.MongoId);
+            Assert.IsTrue(testModelFromT.Type == testModel.Type);
+            Assert.IsTrue(testModelFromT.Time == testModel.Time);
+
+            Assert.IsTrue(testModelFromM.Entity == testModel.Entity);
+            Assert.IsTrue(testModelFromM.MongoId == testModel.MongoId);
+            Assert.IsTrue(testModelFromM.Type == testModel.Type);
+            Assert.IsTrue(testModelFromM.Time == testModel.Time);
+        }
 
     }
 }

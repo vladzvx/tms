@@ -30,10 +30,17 @@ namespace TMS.CommonService.Controllers
             return System.Text.Json.JsonSerializer.Serialize(testModel);
         }
 
-        [HttpPost("read")]
-        public async Task<string> TestRead(TestModel testModel)
+        [HttpPost("read_t")]
+        public async Task<string> TestRead1(TestModel testModel)
         {
             var res = await comboWorker.ReadTarantool(testModel);
+            return System.Text.Json.JsonSerializer.Serialize(res);
+        }
+
+        [HttpPost("read_m")]
+        public async Task<string> TestRead2(TestModel testModel)
+        {
+            var res = await comboWorker.ReadMongo(testModel);
             return System.Text.Json.JsonSerializer.Serialize(res);
         }
     }
