@@ -27,14 +27,14 @@ namespace TMS.CommonService.Controllers
             testModel.MongoId = ObjectId.GenerateNewId();
             testModel.Time = DateTime.UtcNow;
             await comboWorker.Write(testModel);
-            return "Ok";
+            return System.Text.Json.JsonSerializer.Serialize(testModel);
         }
 
         [HttpPost("read")]
         public async Task<string> TestRead(TestModel testModel)
         {
-            await comboWorker.Read(testModel);
-            return "Ok";
+            var res = await comboWorker.Read(testModel);
+            return System.Text.Json.JsonSerializer.Serialize(res);
         }
     }
 }

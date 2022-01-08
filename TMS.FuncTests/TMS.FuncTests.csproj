@@ -14,11 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TMS.Lib\TMS.Lib.csproj" />
     <ProjectReference Include="..\TMS.Tests.Common\TMS.Tests.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update=".env">
+    <None Update="cw.env">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
