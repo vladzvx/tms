@@ -63,7 +63,7 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
-    - name: Deploy Compose
+    - name: Docker clearing
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.TEST_HOST }}
