@@ -14,6 +14,12 @@ namespace TMS.Lib.Models
         public ObjectId MongoId { get; set; }
         public ulong Entity { get; set; }
         public ulong Type { get; set; }
-        public DateTime Time { get; set; }
+        public DateTime Time { get; set; } = DateTime.UtcNow;
+    }
+
+    public class TestModel2
+    {
+        public DateTime Time { get; set; } = DateTime.UtcNow;
+        public long Data { get; set; }
     }
 }

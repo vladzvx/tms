@@ -43,5 +43,24 @@ namespace TMS.CommonService.Controllers
             var res = await comboWorker.ReadMongo(testModel);
             return System.Text.Json.JsonSerializer.Serialize(res);
         }
+
+        [HttpPost("write_array")]
+        public async Task<string> TestWrite2()
+        {
+            try
+            {
+                TestModel2 model1 = new TestModel2();
+                TestModel2 model2 = new TestModel2();
+                TestModel2 model3 = new TestModel2();
+                TestModel2[] data = new TestModel2[] { model1, model2, model3 };
+                await comboWorker.WriteArray(data);
+                return "ok";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+        }
     }
 }

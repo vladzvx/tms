@@ -23,17 +23,27 @@ namespace TMS.Lib.Services
             box.Connect().Wait();
         }
 
+        public async Task WriteArray(TestModel2[] testModels)
+        {
+            var schema = box.GetSchema();
+
+            TarantoolTuple<TarantoolTuple<long,long>,TarantoolTuple<long, long>[]> data = TarantoolTuple.Create(TarantoolTuple.Create((long)1, (long)2), testModels.Select(item=> 
+            {
+                return TarantoolTuple.Create<long, long>(item.Time.Ticks, item.Data);
+            }).ToArray());
+            var q = await box.Call<TarantoolTuple<TarantoolTuple<long, long>, TarantoolTuple<long, long>[]>,long>("test",data);
+        }
         public async Task Write(TestModel testModel)
         {
             try
             {
                 var coll = database.GetCollection<TestModel>("TestModelsCollection");
                 await coll.InsertOneAsync(testModel);
-  
+
                 var schema = box.GetSchema();
                 var data = IdConverter.Convert(testModel.MongoId);
                 var space = await schema.GetSpace("mongos");
-                var res = await space.Insert(TarantoolTuple.Create<long,long, ulong, ulong,long>(data.Int64,data.Int32,testModel.Entity,testModel.Type,testModel.Time.Ticks));
+                var res = await space.Insert(TarantoolTuple.Create<long, long, ulong, ulong, long>(data.Int64, data.Int32, testModel.Entity, testModel.Type, testModel.Time.Ticks));
             }
             catch (Exception ex)
             {
