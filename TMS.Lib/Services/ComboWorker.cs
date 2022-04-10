@@ -49,7 +49,6 @@ namespace TMS.Lib.Services
             {
 
             }
-
         }
 
         public async Task<TestModel> ReadTarantool(TestModel testModel)
@@ -66,7 +65,6 @@ namespace TMS.Lib.Services
             {
                 throw ex;
             }
-
         }
 
         public async Task<TestModel> ReadMongo(TestModel testModel)
