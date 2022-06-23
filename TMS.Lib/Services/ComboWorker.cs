@@ -33,6 +33,16 @@ namespace TMS.Lib.Services
             }).ToArray());
             var q = await box.Call<TarantoolTuple<TarantoolTuple<long, long>, TarantoolTuple<long, long>[]>,long>("test",data);
         }
+
+        public async Task Write(((ulong,ulong,ulong),double)[] datas)
+        {
+            List<TarantoolTuple<TarantoolTuple<ulong, ulong, ulong>, double>> tuples = new List<TarantoolTuple<TarantoolTuple<ulong, ulong, ulong>, double>>();
+            foreach(var d in datas)
+            {
+                tuples.Add(TarantoolTuple.Create(TarantoolTuple.Create(d.Item1.Item1, d.Item1.Item2, d.Item1.Item3),d.Item2));
+            }
+            await box.Call<TarantoolTuple<TarantoolTuple<ulong, ulong, ulong>,double>[]>("add_records", tuples.ToArray());
+        }
         public async Task Write(TestModel testModel)
         {
             try
@@ -80,6 +90,26 @@ namespace TMS.Lib.Services
                 throw ex;
             }
 
+        }
+    }
+
+    public class ComboWorker2
+    {
+        private readonly Box box;
+        public ComboWorker2(Box box)
+        {
+            this.box = box;
+            //box.Connect().Wait();
+        }
+
+        public async Task Write(((ulong, ulong, ulong), double)[] datas)
+        {
+            List<TarantoolTuple<TarantoolTuple<ulong, ulong, ulong>, double>> tuples = new List<TarantoolTuple<TarantoolTuple<ulong, ulong, ulong>, double>>();
+            foreach (var d in datas)
+            {
+                tuples.Add(TarantoolTuple.Create(TarantoolTuple.Create(d.Item1.Item1, d.Item1.Item2, d.Item1.Item3), d.Item2));
+            }
+            await box.Call<TarantoolTuple<TarantoolTuple<TarantoolTuple<ulong, ulong, ulong>, double>[]>>("add_records", TarantoolTuple.Create(tuples.ToArray()));
         }
     }
 }

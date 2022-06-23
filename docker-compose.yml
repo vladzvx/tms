@@ -33,6 +33,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3301:${TARANTOOL_INTERNAL_PORT}
-    environment:
-      TARANTOOL_USER_NAME: ${TARANTOOL_USER}
-      TARANTOOL_USER_PASSWORD: ${TARANTOOL_PWD}
+    #environment:
+     # TARANTOOL_USER_NAME: ${TARANTOOL_USER}
+      #TARANTOOL_USER_PASSWORD: ${TARANTOOL_PWD}

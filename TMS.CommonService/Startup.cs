@@ -18,13 +18,23 @@ namespace TMS.CommonService
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            string mcnnstr = Environment.GetEnvironmentVariable("MONGO_DB_CNNSTR");
-            string tcnnstr = Environment.GetEnvironmentVariable("TARANTOOL_CNNSTR");
-            ConventionRegistry.Register("IgnoreIfNullConvention", new ConventionPack { new IgnoreIfNullConvention(true) }, t => true);
-            services.AddControllers();
-            services.AddSingleton(new MongoClient(mcnnstr));
-            services.AddSingleton<ComboWorker>();
-            services.AddSingleton(new Box(new ProGaudi.Tarantool.Client.Model.ClientOptions(tcnnstr)));
+            try
+            {
+                //string mcnnstr = Environment.GetEnvironmentVariable("MONGO_DB_CNNSTR");
+                string tcnnstr = "admin:secret-cluster-cookie@195.133.196.149:3301";// Environment.GetEnvironmentVariable("TARANTOOL_CNNSTR");
+                
+                ConventionRegistry.Register("IgnoreIfNullConvention", new ConventionPack { new IgnoreIfNullConvention(true) }, t => true);
+                services.AddControllers();
+                var box = Box.Connect(tcnnstr).Result;// new Box(new ProGaudi.Tarantool.Client.Model.ClientOptions(tcnnstr));
+                box.Connect().Wait();
+                //services.AddSingleton(new MongoClient(mcnnstr));
+                services.AddSingleton<ComboWorker2>();
+                services.AddSingleton(box);
+            }
+            catch (Exception ex) 
+            { 
+            
+            }
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

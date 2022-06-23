@@ -1,0 +1,7 @@
+﻿ functions:
+
+   test:
+     module: extensions.funcs
+     handler: test
+     events:
+     - http: {path: "/test", method: POST}

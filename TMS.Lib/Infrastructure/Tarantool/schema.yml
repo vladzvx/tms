@@ -1,0 +1,22 @@
+﻿spaces:
+  records:
+    engine: memtx
+    is_local: false
+    temporary: false
+    sharding_key:
+    - "id"
+    format:
+    - {name: bucket_id, type: unsigned, is_nullable: false}
+    - {name: id, type: unsigned, is_nullable: false}
+    - {name: parent_id, type: unsigned, is_nullable: false}
+    - {name: header_id, type: unsigned, is_nullable: false}
+    - {name: data, type: double, is_nullable: false}
+    indexes:
+    - name: id
+      unique: true
+      parts: [{path: id, type: unsigned, is_nullable: false}]
+      type: TREE
+    - name: bucket_id
+      unique: false
+      parts: [{path: bucket_id, type: unsigned, is_nullable: false}]
+      type: TREE
